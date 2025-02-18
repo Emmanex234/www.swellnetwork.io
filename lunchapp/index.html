@@ -303,7 +303,7 @@
                     <div class="flex flex-2 justify-between">
                         <h2 class="text-2xl font-bold mt-4">Withdraw</h2>
                         <div class="flex items-center mt-2 bg-gray-800 p-2 rounded-lg">
-                        <img src="/WhatsApp Image 2025-02-17 at 22.57.17_ec9a576a.jpg" alt="ETH" class="w-6 h-6 mr-2">
+                        <img src="/lunchapp/eth.jpg" alt="ETH" class="w-6 h-6 mr-2">
                         <select class="bg-gray-800 text-white font-semibold focus:outline-none">
                             <option>rswETH</option>
                         </select>
@@ -318,7 +318,12 @@
     
                     <!-- Balance -->
                     <div class="flex text-gray-400 mt-2 justify-end">
-                        <span class="text-sm text-blue-500">⛽</span>
+                        <span class="text-sm text-blue-500">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="blue" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M16 2H6C4.9 2 4 2.9 4 4V20H2V22H18V20H16V2ZM6 4H14V20H6V4ZM20 6H18V8H20V6ZM20 10H18V18C18 18.55 17.55 19 17 19H15V21H17C18.66 21 20 19.66 20 18V10ZM8 6V18H12V6H8Z"/>
+                            </svg>
+                        </span>
+                        
                         <span class="text-sm ml-1">$0.20</span>
                     </div>
                     
@@ -553,13 +558,81 @@
         <p class="text-blue-400 mt-2">TIME UNTIL NEXT DISTRIBUTION</p>
         
         <!-- Countdown Timer -->
-        <div class="flex justify-left space-x-2 mt-4 text-2xl">
-            <div class="bg-gray-800 p-3 rounded-lg">07 <span class="text-sm">D</span></div>
-            <div class="bg-gray-800 p-3 rounded-lg">15 <span class="text-sm">HR</span></div>
-            <div class="bg-gray-800 p-3 rounded-lg">15 <span class="text-sm">MIN</span></div>
-            <div class="bg-gray-800 p-3 rounded-lg">33 <span class="text-sm">SEC</span></div>
+<body class="flex h-screen bg-gray-900 text-white">
+
+    <div class="flex space-x-2 mt-4 text-2xl font-mono">
+        <div class="flex flex-col items-center">
+            <div class="bg-gray-800 p-3 rounded-lg" id="days">06</div>
+            <span class="text-sm">D</span>
         </div>
-        
+        <span class="text-2xl">:</span>
+        <div class="flex flex-col items-center">
+            <div class="bg-gray-800 p-3 rounded-lg" id="hours">13</div>
+            <span class="text-sm">H</span>
+        </div>
+        <span class="text-2xl">:</span>
+        <div class="flex flex-col items-center">
+            <div class="bg-gray-800 p-3 rounded-lg" id="minutes">16</div>
+            <span class="text-sm">MIN</span>
+        </div>
+        <span class="text-2xl">:</span>
+        <div class="flex flex-col items-center">
+            <div class="bg-gray-800 p-3 rounded-lg" id="seconds">10</div>
+            <span class="text-sm">SEC</span>
+        </div>
+    </div>
+
+    <script>
+        async function fetchServerTime() {
+            try {
+                const response = await fetch("http://worldtimeapi.org/api/timezone/Etc/UTC");
+                const data = await response.json();
+                return Math.floor(new Date(data.utc_datetime).getTime() / 1000); // Convert to UNIX timestamp
+            } catch (error) {
+                console.error("Error fetching server time:", error);
+                return Math.floor(Date.now() / 1000); // Fallback to local time
+            }
+        }
+
+        async function startCountdown() {
+            const serverTime = await fetchServerTime();
+
+            // Set target time (6 days, 13 hours, 16 minutes, 10 seconds from now)
+            const countdownDuration = (6 * 24 * 60 * 60) + (13 * 60 * 60) + (16 * 60) + 10;
+            const targetTimestamp = serverTime + countdownDuration;
+
+            function updateTimer() {
+                const now = Math.floor(Date.now() / 1000);
+                const timeRemaining = targetTimestamp - now;
+
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    document.getElementById("days").textContent = "00";
+                    document.getElementById("hours").textContent = "00";
+                    document.getElementById("minutes").textContent = "00";
+                    document.getElementById("seconds").textContent = "00";
+                    return;
+                }
+
+                const days = Math.floor(timeRemaining / (60 * 60 * 24));
+                const hours = Math.floor((timeRemaining % (60 * 60 * 24)) / (60 * 60));
+                const minutes = Math.floor((timeRemaining % (60 * 60)) / 60);
+                const seconds = timeRemaining % 60;
+
+                document.getElementById("days").textContent = days.toString().padStart(2, '0');
+                document.getElementById("hours").textContent = hours.toString().padStart(2, '0');
+                document.getElementById("minutes").textContent = minutes.toString().padStart(2, '0');
+                document.getElementById("seconds").textContent = seconds.toString().padStart(2, '0');
+            }
+
+            updateTimer();
+            const timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        startCountdown();
+    </script>
+
+</body>
         <p class="text-blue-400 mt-4">CURRENT WAVE DISTRIBUTION</p>
         <div class="flex items-left justify-left mt-2">
             <img src="https://cryptologos.cc/logos/ethereum-eth-logo.png" alt="ETH" class="w-8 h-8 mr-2">
