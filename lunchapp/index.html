@@ -414,52 +414,66 @@
                         <div class="bg-gray-800 p-4 rounded-lg mt-4 flex justify-between items-center">
                             <input type="text" class="bg-transparent text-2xl font-bold outline-none w-full" placeholder="0">
 
-                            <button onclick="openModalETH()" 
-                                    class="bg-gray-700 px-3 py-1 rounded-full flex items-center space-x-2 hover:bg-gray-600 transition">
-                                    <img src="https://th.bing.com/th?q=ETH+Image&w=36&h=36&c=7&rs=1&p=0&o=5&dpr=1.5&pid=1.7&mkt=en-WW&cc=NG&setlang=en&adlt=moderate&t=1" 
-                                        alt="ETH" class="w-5 h-5">
-                                    <span class="font-semibold">ETH</span>
-                            </button>
-                            <!-- Modal (Hidden by Default) -->
-    <div id="popupModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-        <div class="bg-gray-800 p-6 rounded-lg shadow-lg w-96">
-            <h2 class="text-xl font-bold mb-4">Ethereum Information</h2>
-            <p>This is a sample popup when you click the ETH button.</p>
-            <div class="flex justify-end mt-4">
-                <button onclick="closeModalETH()" class="bg-blue-500 px-4 py-2 rounded-full text-white hover:bg-blue-600">
-                    Close
-                </button>
-            </div>
+                            <!-- Button (Default ETH) -->
+    <button onclick="openModalETH()" 
+    class="bg-gray-700 px-3 py-1 rounded-full flex items-center space-x-2 hover:bg-gray-600 transition">
+    <img id="coinImage" src="https://th.bing.com/th?q=ETH+Image&w=36&h=36&c=7&rs=1&p=0&o=5&dpr=1.5&pid=1.7&mkt=en-WW&cc=NG&setlang=en&adlt=moderate&t=1" 
+        alt="ETH" class="w-5 h-5">
+    <span id="coinText" class="font-semibold">ETH</span>
+</button>
+
+<!-- Modal (Hidden by Default) -->
+<div id="popupModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg w-96">
+        <h2 class="text-xl font-bold mb-4">Select a Cryptocurrency</h2>
+        
+        <!-- Dropdown -->
+        <select id="coinSelect" class="w-full p-2 rounded bg-gray-700 text-white">
+            <option value="ETH" data-image="https://th.bing.com/th?q=ETH+Image&w=36&h=36&c=7&rs=1&p=0&o=5&dpr=1.5&pid=1.7&mkt=en-WW&cc=NG&setlang=en&adlt=moderate&t=1">Ethereum (ETH)</option>
+            <option value="BTC" data-image="https://th.bing.com/th?q=BTC+Image&w=36&h=36">Bitcoin (BTC)</option>
+            <option value="BNB" data-image="https://th.bing.com/th?q=BNB+Image&w=36&h=36">Binance Coin (BNB)</option>
+            <option value="SOL" data-image="https://th.bing.com/th?q=SOL+Image&w=36&h=36">Solana (SOL)</option>
+        </select>
+
+        <!-- Close & Select Button -->
+        <div class="flex justify-end mt-4 space-x-2">
+            <button onclick="closeModalETH()" class="bg-gray-500 px-4 py-2 rounded-full text-white hover:bg-gray-600">
+                Cancel
+            </button>
+            <button onclick="updateCoinETH()" class="bg-blue-500 px-4 py-2 rounded-full text-white hover:bg-blue-600">
+                Select
+            </button>
         </div>
     </div>
+</div>
 
-    <script>
-        function openModalETH() {
-            document.getElementById("popupModal").classList.remove("hidden");
-        }
+<script>
+    function openModalETH() {
+        document.getElementById("popupModal").classList.remove("hidden");
+    }
 
-        function closeModalETH() {
-            document.getElementById("popupModal").classList.add("hidden");
-        }
-    </script>
+    function closeModalETH() {
+        document.getElementById("popupModal").classList.add("hidden");
+    }
 
-  
-                        </div>
+    function updateCoinETH() {
+        const select = document.getElementById("coinSelect");
+        const selectedOption = select.options[select.selectedIndex];
+        const coinText = selectedOption.value;
+        const coinImage = selectedOption.getAttribute("data-image");
+
+        // Update Button
+        document.getElementById("coinText").textContent = coinText;
+        document.getElementById("coinImage").src = coinImage;
+
+        // Close Modal
+        closeModalETH();
+    }
+</script>
+
+                       
                 
-                        <!-- Connect Wallet Button -->
-                        <button onclick="walletModal()" class="w-full bg-blue-600 text-white py-3 mt-6 rounded-full text-lg font-semibold">
-                            Connect wallet
-                            <script>
-                                function walletModal(){
-                                    document.getElementById('wallet-modal').style.display = 'block';
-                                }
-                                function closeModal(){
-                                    document.getElementById('wallet-modal').style.display = 'none' 
-                                }
-                            </script>
-                        </button>
-                
-                    </div>
+                    
 
                     <!-- Wallet Modal -->
 <div id="wallet-modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 hidden transition-opacity">
