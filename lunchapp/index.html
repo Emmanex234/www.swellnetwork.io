@@ -414,62 +414,99 @@
                         <div class="bg-gray-800 p-4 rounded-lg mt-4 flex justify-between items-center">
                             <input type="text" class="bg-transparent text-2xl font-bold outline-none w-full" placeholder="0">
 
-                            <!-- Button (Default ETH) -->
-    <button onclick="openModalETH()" 
-    class="bg-gray-700 px-3 py-1 rounded-full flex items-center space-x-2 hover:bg-gray-600 transition">
-    <img id="coinImage" src="https://th.bing.com/th?q=ETH+Image&w=36&h=36&c=7&rs=1&p=0&o=5&dpr=1.5&pid=1.7&mkt=en-WW&cc=NG&setlang=en&adlt=moderate&t=1" 
-        alt="ETH" class="w-5 h-5">
-    <span id="coinText" class="font-semibold">ETH</span>
-</button>
-
-<!-- Modal (Hidden by Default) -->
-<div id="popupModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-    <div class="bg-gray-800 p-6 rounded-lg shadow-lg w-96">
-        <h2 class="text-xl font-bold mb-4">Select a Cryptocurrency</h2>
-        
-        <!-- Dropdown -->
-        <select id="coinSelect" class="w-full p-2 rounded bg-gray-700 text-white">
-            <option value="ETH" data-image="https://th.bing.com/th?q=ETH+Image&w=36&h=36&c=7&rs=1&p=0&o=5&dpr=1.5&pid=1.7&mkt=en-WW&cc=NG&setlang=en&adlt=moderate&t=1">Ethereum (ETH)</option>
-            <option value="BTC" data-image="https://th.bing.com/th?q=BTC+Image&w=36&h=36">Bitcoin (BTC)</option>
-            <option value="BNB" data-image="https://th.bing.com/th?q=BNB+Image&w=36&h=36">Binance Coin (BNB)</option>
-            <option value="SOL" data-image="https://th.bing.com/th?q=SOL+Image&w=36&h=36">Solana (SOL)</option>
-        </select>
-
-        <!-- Close & Select Button -->
-        <div class="flex justify-end mt-4 space-x-2">
-            <button onclick="closeModalETH()" class="bg-gray-500 px-4 py-2 rounded-full text-white hover:bg-gray-600">
-                Cancel
-            </button>
-            <button onclick="updateCoinETH()" class="bg-blue-500 px-4 py-2 rounded-full text-white hover:bg-blue-600">
-                Select
-            </button>
-        </div>
-    </div>
-</div>
-
-<script>
-    function openModalETH() {
-        document.getElementById("popupModal").classList.remove("hidden");
-    }
-
-    function closeModalETH() {
-        document.getElementById("popupModal").classList.add("hidden");
-    }
-
-    function updateCoinETH() {
-        const select = document.getElementById("coinSelect");
-        const selectedOption = select.options[select.selectedIndex];
-        const coinText = selectedOption.value;
-        const coinImage = selectedOption.getAttribute("data-image");
-
-        // Update Button
-        document.getElementById("coinText").textContent = coinText;
-        document.getElementById("coinImage").src = coinImage;
-
-        // Close Modal
-        closeModalETH();
-    }
-</script>
+                           
+                                <!-- Button -->
+                                <button onclick="openModalETH()" 
+                                    class="bg-gray-700 px-3 py-1 rounded-full flex items-center space-x-2 hover:bg-gray-600 transition">
+                                    <img id="coinImage" src="https://th.bing.com/th?q=ETH+Image&w=36&h=36" 
+                                        alt="ETH" class="w-5 h-5">
+                                    <span id="coinText" class="font-semibold">ETH</span>
+                                </button>
+                            
+                                <!-- Modal -->
+                                <div id="popupModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+                                    <div class="bg-gray-800 p-6 rounded-lg shadow-lg w-96">
+                                        <h2 class="text-xl font-bold mb-4">Select a Cryptocurrency</h2>
+                                        
+                                        <!-- Search Bar -->
+                                        <input type="text" id="searchInput" onkeyup="filterCoins()" placeholder="Search" 
+                                            class="w-full p-2 rounded bg-gray-700 text-white mb-3">
+                            
+                                        <!-- Coin List -->
+                                        <div id="coinList" class="max-h-60 overflow-y-auto">
+                                            <!-- Coins dynamically added here -->
+                                        </div>
+                            
+                                        <!-- Buttons -->
+                                        <div class="flex justify-end mt-4 space-x-2">
+                                            <button onclick="closeModalETH()" class="bg-gray-500 px-4 py-2 rounded-full text-white hover:bg-gray-600">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                                <script>
+                                    const coins = [
+                                        { name: "Ethereum", symbol: "ETH", image: "https://th.bing.com/th?q=ETH+Image&w=36&h=36" },
+                                        { name: "Bitcoin", symbol: "BTC", image: "https://th.bing.com/th?q=BTC+Image&w=36&h=36" },
+                                        { name: "Wrapped eETH", symbol: "weETH", image: "https://th.bing.com/th?q=ETH+Image&w=36&h=36" },
+                                        { name: "Solana", symbol: "SOL", image: "https://th.bing.com/th?q=SOL+Image&w=36&h=36" },
+                                        { name: "King Protocol", symbol: "KING", image: "https://th.bing.com/th?q=BNB+Image&w=36&h=36" }
+                                    ];
+                            
+                                    function openModalETH() {
+                                        document.getElementById("popupModal").classList.remove("hidden");
+                                        renderCoinList();
+                                    }
+                            
+                                    function closeModalETH() {
+                                        document.getElementById("popupModal").classList.add("hidden");
+                                    }
+                            
+                                    function renderCoinList() {
+                                        const coinList = document.getElementById("coinList");
+                                        coinList.innerHTML = "";
+                                        coins.forEach(coin => {
+                                            const div = document.createElement("div");
+                                            div.classList = "flex items-center space-x-3 p-2 hover:bg-gray-700 cursor-pointer";
+                                            div.innerHTML = `
+                                                <img src="${coin.image}" alt="${coin.symbol}" class="w-6 h-6 rounded-full">
+                                                <div class="flex-1">
+                                                    <p class="font-semibold">${coin.name}</p>
+                                                    <p class="text-sm text-gray-400">${coin.symbol}</p>
+                                                </div>
+                                            `;
+                                            div.onclick = () => selectCoin(coin);
+                                            coinList.appendChild(div);
+                                        });
+                                    }
+                            
+                                    function filterCoins() {
+                                        const searchValue = document.getElementById("searchInput").value.toLowerCase();
+                                        const filteredCoins = coins.filter(coin => coin.name.toLowerCase().includes(searchValue) || coin.symbol.toLowerCase().includes(searchValue));
+                                        document.getElementById("coinList").innerHTML = "";
+                                        filteredCoins.forEach(coin => {
+                                            const div = document.createElement("div");
+                                            div.classList = "flex items-center space-x-3 p-2 hover:bg-gray-700 cursor-pointer";
+                                            div.innerHTML = `
+                                                <img src="${coin.image}" alt="${coin.symbol}" class="w-6 h-6 rounded-full">
+                                                <div class="flex-1">
+                                                    <p class="font-semibold">${coin.name}</p>
+                                                    <p class="text-sm text-gray-400">${coin.symbol}</p>
+                                                </div>
+                                            `;
+                                            div.onclick = () => selectCoin(coin);
+                                            document.getElementById("coinList").appendChild(div);
+                                        });
+                                    }
+                            
+                                    function selectCoin(coin) {
+                                        document.getElementById("coinText").textContent = coin.symbol;
+                                        document.getElementById("coinImage").src = coin.image;
+                                        closeModalETH();
+                                    }
+                                </script>
+                           
+                            
 
                        
                 
