@@ -305,7 +305,8 @@
                         <div class="flex items-center mt-2 bg-gray-800 p-2 rounded-lg">
                         <img src="/lunchapp/eth.jpg" alt="ETH" class="w-6 h-6 mr-2">
                         <select class="bg-gray-800 text-white font-semibold focus:outline-none">
-                            <option>rswETH</option>
+                            <option>rswETH
+                            </option>
                         </select>
                     </div>
                     </div>
@@ -412,11 +413,37 @@
                         <!-- Amount Input -->
                         <div class="bg-gray-800 p-4 rounded-lg mt-4 flex justify-between items-center">
                             <input type="text" class="bg-transparent text-2xl font-bold outline-none w-full" placeholder="0">
-                            <button class="bg-gray-700 px-3 py-1 rounded-full flex items-center space-x-2">
-                                <img src="https://th.bing.com/th?q=ETH+Image&w=36&h=36&c=7&rs=1&p=0&o=5&dpr=1.5&pid=1.7&mkt=en-WW&cc=NG&setlang=en&adlt=moderate&t=1" alt="ETH" class="w-5 h-5">
-                                <span class="font-semibold">ETH</span>
-                                
+
+                            <button onclick="openModalETH()" 
+                                    class="bg-gray-700 px-3 py-1 rounded-full flex items-center space-x-2 hover:bg-gray-600 transition">
+                                    <img src="https://th.bing.com/th?q=ETH+Image&w=36&h=36&c=7&rs=1&p=0&o=5&dpr=1.5&pid=1.7&mkt=en-WW&cc=NG&setlang=en&adlt=moderate&t=1" 
+                                        alt="ETH" class="w-5 h-5">
+                                    <span class="font-semibold">ETH</span>
                             </button>
+                            <!-- Modal (Hidden by Default) -->
+    <div id="popupModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-gray-800 p-6 rounded-lg shadow-lg w-96">
+            <h2 class="text-xl font-bold mb-4">Ethereum Information</h2>
+            <p>This is a sample popup when you click the ETH button.</p>
+            <div class="flex justify-end mt-4">
+                <button onclick="closeModalETH()" class="bg-blue-500 px-4 py-2 rounded-full text-white hover:bg-blue-600">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModalETH() {
+            document.getElementById("popupModal").classList.remove("hidden");
+        }
+
+        function closeModalETH() {
+            document.getElementById("popupModal").classList.add("hidden");
+        }
+    </script>
+
+  
                         </div>
                 
                         <!-- Connect Wallet Button -->
